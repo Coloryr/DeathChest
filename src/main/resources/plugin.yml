@@ -1,0 +1,12 @@
+name: DeathChest
+main: DeathChest.Color_yr.DeathChest
+author: Color_yr
+version: 1.0.0
+
+softdepend:
+  - Vault
+
+commands:
+  deathchest:
+    description: DeathChest的主要指令
+    usage: §4[DeathChest]§6/DeathChest help来查看帮助

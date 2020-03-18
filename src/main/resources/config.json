@@ -1,0 +1,9 @@
+{
+  "Cost": {
+    "SaveInChest": 100,
+    "SaveInLocal": 50,
+    "NoDrop": 500
+  },
+  "PlaySet": {},
+  "Version": "1.0.0"
+}
