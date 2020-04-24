@@ -1,9 +1,24 @@
 {
   "Cost": {
+    "Enable": true,
     "SaveInChest": 100,
     "SaveInLocal": 50,
     "NoDrop": 500
   },
   "PlaySet": {},
+  "Disable": [],
+  "Message": {
+    "CantPlace": "§d[DeathChest]§c你有一些物品无法放进箱子",
+    "CantGen": "§d[DeathChest]§c无法生成箱子",
+    "Gen": "§d[DeathChest]§e你的死亡箱子生成在了%x%, %y%, %z%",
+    "Cost": "§d[DeathChest]§e生成死亡箱子花费了%Money%",
+    "Cost1": "§d[DeathChest]§e保存到设置的箱子花费了%Money%",
+    "Cost2": "§d[DeathChest]§e死亡不掉落花费了%Money%",
+    "NoMoney": "§d[DeathChest]§c你没有足够的钱生成死亡箱子",
+    "NoMoney1": "§d[DeathChest]§c你没有足够的钱保存到设置的箱子",
+    "NoMoney2": "§d[DeathChest]§c你没有足够的钱生成死亡箱子",
+    "ErrorChest": "§d[DeathChest]§c设置的箱子异常",
+    "Mode": "§d[DeathChest]§e你的死亡掉落保护模式为：%Mode%"
+  },
   "Version": "1.0.0"
 }

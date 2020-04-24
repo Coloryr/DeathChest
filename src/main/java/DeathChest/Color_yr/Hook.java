@@ -22,11 +22,15 @@ public class Hook {
     }
 
     public boolean Check(Player player, int cost) {
+        if(!DeathChest.Config.getCost().isEnable())
+            return true;
         return econ.has(player, cost);
     }
 
     public void Cost(Player player, int cost, String message)
     {
+        if(!DeathChest.Config.getCost().isEnable())
+            return;
         EconomyResponse r = econ.withdrawPlayer(player, cost);
         if(r.transactionSuccess())
         {

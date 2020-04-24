@@ -1,12 +1,8 @@
 package DeathChest.Color_yr;
 
 import com.google.gson.Gson;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -18,7 +14,7 @@ public class DeathChest extends JavaPlugin {
 
     public static final String Version = "1.0.0";
     public static ConfigOBJ Config;
-    public static File ConfigFile;
+    private static File ConfigFile;
     public static Logger log;
     public static Plugin plugin;
     public static Hook Hook;
@@ -30,7 +26,10 @@ public class DeathChest extends JavaPlugin {
         try {
             String data = new Gson().toJson(Config);
             if (ConfigFile.exists()) {
-                Writer out = new FileWriter(ConfigFile);
+                Writer out = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(ConfigFile), StandardCharsets.UTF_8));
+
+                out.flush();
                 out.write(data);
                 out.close();
             }
@@ -40,17 +39,29 @@ public class DeathChest extends JavaPlugin {
         }
     }
 
-    public static void LoadConfig() throws FileNotFoundException {
+    private static void LoadConfig() throws FileNotFoundException {
         InputStreamReader reader = new InputStreamReader(new FileInputStream(ConfigFile), StandardCharsets.UTF_8);
         BufferedReader bf = new BufferedReader(reader);
         Config = new Gson().fromJson(bf, ConfigOBJ.class);
+        try {
+            reader.close();
+            bf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (Config == null) {
             log.warning("配置文件错误");
             Config = new ConfigOBJ();
         }
         log.info("§d[DeathChest]§e当前插件版本为：" + Version
                 + "，你的配置文件版本为：" + Config.getVersion());
-        initV();
+        CommandEX.GenHelp();
+        Hook = new Hook();
+        if (Config.getCost().isEnable())
+            initV();
+        else {
+            run = true;
+        }
     }
 
     public static void setConfig() {
@@ -61,6 +72,7 @@ public class DeathChest extends JavaPlugin {
             if (!ConfigFile.exists()) {
                 InputStream in = plugin.getResource("config.json");
                 Files.copy(in, ConfigFile.toPath());
+                in.close();
             }
             LoadConfig();
         } catch (IOException e) {
@@ -69,39 +81,7 @@ public class DeathChest extends JavaPlugin {
         }
     }
 
-    private Economy econ = null;
-
-    public boolean setupEconomy() {
-        if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return true;
-    }
-
-    public boolean Check(String name, int cost) {
-        Player player = Bukkit.getPlayer(name);
-        if (player == null)
-            return false;
-        return econ.has(player, cost);
-    }
-
-    public void Cost(String name, int cost) {
-        Player player = Bukkit.getPlayer(name);
-        if (player == null)
-            return;
-        EconomyResponse r = econ.depositPlayer(player, cost);
-        if (r.transactionSuccess()) {
-            player.sendMessage("");
-        }
-    }
-
     public static void initV() {
-        Hook = new Hook();
         if (Hook.setupEconomy()) {
             log.info("§d[DeathChest]§e已启用Vault支持");
             run = true;

@@ -19,6 +19,17 @@ public class PlaySet {
     }
 
     public int getMode() {
+        int b = 0;
+        if(DeathChest.Config.getDisable().contains(mode)) {
+            for (int a : DeathChest.Config.getDisable()) {
+                if (a == b)
+                    b++;
+                else {
+                    mode = b;
+                    break;
+                }
+            }
+        }
         return mode;
     }
 
