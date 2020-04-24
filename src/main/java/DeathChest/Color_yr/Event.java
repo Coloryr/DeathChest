@@ -30,13 +30,15 @@ public class Event implements Listener {
             location.setY(world.getMaxHeight() - 1);
         }
         List<Inventory> list = new ArrayList<>();
+        Block temp;
+        int max = world.getMaxHeight();
         while (needDoble) {
-            Block temp = world.getBlockAt(location);
+            temp = world.getBlockAt(location);
             if (temp.getType().equals(Material.AIR)) {
                 Location location1 = location.clone();
                 location1.setX(location1.getX() + 1);
                 Block temp1 = world.getBlockAt(location1);
-                if (temp1.getRelative(0,1,0).getType().equals(Material.AIR)) {
+                if (temp1.getType().equals(Material.AIR)) {
                     temp1.setType(Material.CHEST);
                     temp.setType(Material.CHEST);
 
@@ -51,7 +53,7 @@ public class Event implements Listener {
                 }
                 location1.setX(location1.getX() - 2);
                 temp1 = world.getBlockAt(location1);
-                if (temp1.getType().equals(Material.AIR) && !temp1.isLiquid()) {
+                if (temp1.getType().equals(Material.AIR)) {
                     temp1.setType(Material.CHEST);
                     temp.setType(Material.CHEST);
 
@@ -67,7 +69,7 @@ public class Event implements Listener {
                 location1.setX(location1.getX() + 1);
                 location1.setZ(location1.getZ() + 1);
                 temp1 = world.getBlockAt(location1);
-                if (temp1.getType().equals(Material.AIR) && !temp1.isLiquid()) {
+                if (temp1.getType().equals(Material.AIR)) {
                     temp1.setType(Material.CHEST);
                     temp.setType(Material.CHEST);
 
@@ -82,7 +84,7 @@ public class Event implements Listener {
                 }
                 location1.setZ(location1.getZ() - 2);
                 temp1 = world.getBlockAt(location1);
-                if (temp1.getType().equals(Material.AIR) && !temp1.isLiquid()) {
+                if (temp1.getType().equals(Material.AIR)) {
                     temp1.setType(Material.CHEST);
                     temp.setType(Material.CHEST);
 
@@ -100,14 +102,27 @@ public class Event implements Listener {
                 location.setY(location.getBlockY() + 1);
             else
                 location.setY(location.getBlockY() - 1);
-            if (location.getBlockY() >= world.getMaxHeight()) {
+            if (location.getBlockY() >= max) {
                 up = false;
             }
             if (location.getBlockY() <= 0) {
                 return null;
             }
         }
-        Block temp = world.getBlockAt(location);
+        temp = world.getBlockAt(location);
+        while (!temp.getType().equals(Material.AIR)) {
+            temp = world.getBlockAt(location);
+            if (up)
+                location.setY(location.getBlockY() + 1);
+            else
+                location.setY(location.getBlockY() - 1);
+            if (location.getBlockY() >= max) {
+                up = false;
+            }
+            if (location.getBlockY() <= 0) {
+                return null;
+            }
+        }
         temp.setType(Material.CHEST);
         BlockState state = temp.getState();
         if (state instanceof Chest)
@@ -164,7 +179,8 @@ public class Event implements Listener {
         List<Inventory> inventory = setBlock(player.getWorld(), player.getLocation(), e.getDrops().size() > 27);
         RE re = new RE();
         re.ok = Check(inventory, e, player);
-        re.location = inventory.get(0).getLocation();
+        if (re.ok)
+            re.location = inventory.get(0).getLocation();
         return re;
     }
 
