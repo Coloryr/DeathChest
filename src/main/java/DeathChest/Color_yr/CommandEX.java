@@ -52,7 +52,7 @@ public class CommandEX implements CommandExecutor, TabExecutor {
             help += "§d[DeathChest]§e模式7，优先级：设置的箱子->死亡箱子\n";
         }
 
-        if(DeathChest.Config.getCost().isEnable()) {
+        if (DeathChest.Config.getCost().isEnable()) {
             if (!DeathChest.Config.getDisable().contains(1)
                     || !DeathChest.Config.getDisable().contains(4)
                     || !DeathChest.Config.getDisable().contains(5)
@@ -83,17 +83,13 @@ public class CommandEX implements CommandExecutor, TabExecutor {
             if (args.length == 0) {
                 sender.sendMessage("§d[DeathChest]§c错误，请使用/chest help 获取帮助");
                 return true;
-            }
-            if (args[0].equalsIgnoreCase("reload")) {
+            } else if (args[0].equalsIgnoreCase("reload")) {
                 if (sender.hasPermission("DeathChest.admin")) {
                     DeathChest.setConfig();
-                    sender.sendMessage("§d[SkillUse]§e重载成功");
-                } else {
-                    sender.sendMessage("§d[SkillUse]§c你没有权限");
+                    sender.sendMessage("§d[DeathChest]§e重载成功");
+                    return true;
                 }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("help")) {
+            } else if (args[0].equalsIgnoreCase("help")) {
                 sender.sendMessage("§d[DeathChest]§e帮助手册");
                 sender.sendMessage("§d[DeathChest]§e使用/DeathChest set 来设置存储箱子（需要你看着箱子）");
                 sender.sendMessage("§d[DeathChest]§e使用/DeathChest mode [mode] 来设置死亡掉落保护模式");
@@ -134,7 +130,7 @@ public class CommandEX implements CommandExecutor, TabExecutor {
                     return true;
                 }
                 PlaySet set = DeathChest.Config.getPlayerSet(sender.getName());
-                if(set == null)
+                if (set == null)
                     set = new PlaySet();
                 set.setMode(a);
                 DeathChest.Config.setPlayerSet(sender.getName(), set);

@@ -1,6 +1,6 @@
 {
   "Cost": {
-    "Enable": true,
+    "Enable": false,
     "SaveInChest": 100,
     "SaveInLocal": 50,
     "NoDrop": 500
