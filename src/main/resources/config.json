@@ -18,7 +18,8 @@
     "NoMoney1": "§d[DeathChest]§c你没有足够的钱保存到设置的箱子",
     "NoMoney2": "§d[DeathChest]§c你没有足够的钱生成死亡箱子",
     "ErrorChest": "§d[DeathChest]§c设置的箱子异常",
-    "Mode": "§d[DeathChest]§e你的死亡掉落保护模式为：%Mode%"
+    "Mode": "§d[DeathChest]§e你的死亡掉落保护模式为：%Mode%",
+    "Null": "§d[DeathChest]§e你的箱子已清空"
   },
   "Version": "1.0.0"
 }

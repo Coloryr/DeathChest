@@ -9,20 +9,34 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.metadata.MetadataValueAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Event implements Listener {
 
-    class RE
+    static class RE
     {
         public boolean ok;
         public Location location;
     }
+    private final MetadataValue drop =  new MetadataValueAdapter(DeathChest.plugin) {
+        @Override
+        public Object value() {
+            return true;
+        }
+
+        @Override
+        public void invalidate() {
+
+        }
+    };
     private List<Inventory> setBlock(World world, Location location, boolean needDoble) {
         boolean up = true;
         if (location.getY() >= world.getMaxHeight()) {
@@ -95,6 +109,9 @@ public class Event implements Listener {
                     if (state instanceof Chest)
                         list.add(((Chest) state).getBlockInventory());
 
+                    temp.setMetadata("NoDrop", drop);
+                    temp1.setMetadata("NoDrop", drop);
+
                     return list;
                 }
             }
@@ -127,6 +144,8 @@ public class Event implements Listener {
         BlockState state = temp.getState();
         if (state instanceof Chest)
             list.add(((Chest) state).getBlockInventory());
+
+        temp.setMetadata("NoDrop", drop);
         return list;
     }
 
@@ -393,6 +412,28 @@ public class Event implements Listener {
             }
             temp = temp.replace("%Mode%", "" + mode);
             player.sendMessage(temp);
+        }
+    }
+    @EventHandler
+    public void selGui(InventoryCloseEvent e) {
+        if (e.getPlayer() instanceof Player) {
+            Player player = (Player) e.getPlayer();
+            Inventory inventory = e.getInventory();
+            Location location = inventory.getLocation();
+            Block block = player.getWorld().getBlockAt(location);
+            if (block.getType().equals(Material.CHEST)) {
+                List<MetadataValue> list = block.getMetadata("NoDrop");
+                if (list.size() > 0 && list.get(0).asBoolean()) {
+                    for (ItemStack item : inventory) {
+                        if (item != null &&
+                                !item.getType().equals(Material.AIR)) {
+                            return;
+                        }
+                    }
+                    block.setType(Material.AIR);
+                    player.sendMessage(DeathChest.Config.getMessage().getNull());
+                }
+            }
         }
     }
 }

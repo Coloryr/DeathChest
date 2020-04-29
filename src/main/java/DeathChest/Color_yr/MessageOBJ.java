@@ -12,6 +12,7 @@ public class MessageOBJ {
     private String ErrorChest;
     private String Mode;
     private String Gen;
+    private String Null;
 
     public MessageOBJ() {
         CantPlace = "§d[DeathChest]§c你有一些物品无法放进箱子";
@@ -25,8 +26,13 @@ public class MessageOBJ {
         NoMoney2 = "§d[DeathChest]§c你没有足够的钱生成死亡箱子";
         ErrorChest = "§d[DeathChest]§c设置的箱子异常";
         Mode = "§d[DeathChest]§e你的死亡掉落保护模式为：%Mode%";
+        Null = "§d[DeathChest]§e你的箱子已清空";
     }
-    
+
+    public String getNull() {
+        return Null;
+    }
+
     public String getGen() {
         return Gen;
     }
