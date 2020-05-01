@@ -56,10 +56,11 @@ public class DeathChest extends JavaPlugin {
         log.info("§d[DeathChest]§e当前插件版本为：" + Version
                 + "，你的配置文件版本为：" + Config.getVersion());
         CommandEX.GenHelp();
-        Hook = new Hook();
-        if (Config.getCost().isEnable())
+        if (Config.getCost().isEnable() &&
+                Bukkit.getPluginManager().getPlugin("value") != null) {
+            Hook = new Hook();
             initV();
-        else {
+        } else {
             run = true;
         }
     }
