@@ -9,16 +9,13 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class Hook {
     private Economy econ = null;
 
-    public Hook() {
+    public boolean setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
-            return;
+            return false;
         }
         econ = rsp.getProvider();
-    }
-
-    public boolean setupEconomy() {
-        return econ != null;
+        return true;
     }
 
     public boolean Check(Player player, int cost) {
